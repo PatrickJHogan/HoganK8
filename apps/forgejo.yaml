@@ -21,10 +21,10 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: forgejo
-  source:
+  sources:
     - repoURL: code.forgejo.org/forgejo-helm
       chart: forgejo
-      targetRevison: 17.1.7
+      targetRevision: 17.1.7
       helm:
         valueFiles:
           - $values/workloads/forgejo/values.yaml
