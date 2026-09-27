@@ -3,7 +3,7 @@ strategy:
   type: Recreate
 
 nodeSelector:
-  hoganlab/locatin: cloud
+  hoganlab/location: cloud
 persistence:
   enabled: true
   size: 5Gi
