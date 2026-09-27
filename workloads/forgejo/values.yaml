@@ -1,0 +1,43 @@
+replicaCount: 1
+strategy:
+  type: Recreate
+
+nodeSelector:
+  hoganlab/locatin: cloud
+persistence:
+  enabled: true
+  size: 5Gi
+  storageClass: local-path
+
+podSecurityContext:
+  fsGroup: 1000
+containerSecurityContext:
+  runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: [ALL]
+  seccompProfile:
+    type: RuntimeDefault
+ingress:
+  enabled: true
+  className: traefik
+  hosts:
+    - host: git.hogans.at
+      paths:
+        - path: /
+          pathType: Prefix
+gitea:
+  admin:
+    existingSecret: forgejo-admin
+    email: patrickjhogan@gmail.com
+  config:
+    server:
+      DOMAIN: git.hogans.at
+      ROOT_URL: https://git.hogans.at/
+      DISABLE_SSH: true
+    service:
+      DISABLE_REGISTRATION: true
+      REQUIRE_SIGNIN_VIEW: true
+    database:
+      DB_TYPE: sqlite3

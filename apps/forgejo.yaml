@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: repo-forgejo-helm
+  namespaces: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+stringData:
+  name: forgejo-helm
+  type: helm
+  url: code.forgejo.org/forgejo-helm
+  enableOCI: "true"
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: forgejo
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: forgejo
+  sources:
+    - repoURL: code.forgejo.org/forgejo-helm
+      chart: forgejo
+      targetRevison: 17.1.7
+      helm:
+        valueFiles:
+          - $values/workloads/forgejo/values.yaml
+    - repoURL: https://github.com/PatrickJHogan/HoganK8.git
+      targetRevision: main
+      ref: values
+    - repoURL: https://github.com/PatrickJHogan/HoganK8.git
+      targetRevision: main
+      path: workloads/forgejo/manifests
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
