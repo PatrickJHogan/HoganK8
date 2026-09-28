@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: freshrss
+resources:
+  - networkPolicy-https-out.yaml
+  - networkPolicy-traefik-in.yaml
+components:
+  - ../../../components/netpol-baseline
