@@ -4,5 +4,6 @@ namespace: freshrss
 resources:
   - networkPolicy-https-out.yaml
   - networkPolicy-traefik-in.yaml
+  - networkPolicy-DNS.yaml
 components:
   - ../../../components/netpol-baseline
