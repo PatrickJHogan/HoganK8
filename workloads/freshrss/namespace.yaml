@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: freshrss
+  labels:
+    # Official image starts as root (Apache + cron drop to www-data),
+    # so "restricted" would reject it. "baseline" still blocks privileged/hostPath/etc.
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+ 
+

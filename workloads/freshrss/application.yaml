@@ -1,69 +1,23 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
   name: freshrss
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: freshrss
-  template:
-    metadata:
-      labels:
-        app: freshrss
-  spec:
-    nodeSelector:
-      hoganlab/location: cloud
-    automountServiceAccountToken: false
-    enableServiceLinks: false
-    securityContext:
-      seccompProfile:
-        type: RuntimeDefault
-    containers:
-      - name: freshrss
-        image: docker.io/freshrss/freshrss:1.28.1
-        imagePullPolicy: IfNotPresent
-        env:
-          - name: TZ
-            value: America/New_York
-          - name: CRON_MIND
-            value: "*/20"
-          - name: TRUSTED_PROXY
-            value: "10.244.0.0/16 10.42.0.0/24"
-        ports:
-          - name: http
-            containerPort: 80
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop: ["ALL"]
-            add: ["CHOWN", "DAC_OVERRIDE", "FOWNER", "SETUID", "SETGID", "NET_BIND_SERVICE"]
-        volumeMounts:
-          - name: data
-            mountPath: /var/www/FreshRSS/extensions
-            subPath: data
-          - name: data
-            mountPath: /var/www/FreshRSS/extensions
-            subPath: extensions
-        resources:
-          requests:
-            cpu: 50m
-            memory: 128Mi
-          limits:
-            memory: 384Mi
-          readinessProbe:
-            httpGet:
-              path: /
-              port: http
-            periodSeconds: 15
-          livenessProbe:
-            tcpSocket:
-              port: http
-            initialDelaySeconds: 20
-            periodSeconds: 30
-  volumes:
-    - name: data
-      persistentVolumeClaim:
-        claimName: freshrss-data
+  project: default
+  source:
+    repoURL: https://github.com/PatrickJHogan/HoganK8.git
+    targetRevision: main
+    path: workloads/freshrss
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: freshrss
+  syncPolicy:
+    # Enable after seeding the volume:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
