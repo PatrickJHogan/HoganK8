@@ -7,8 +7,10 @@ nodeSelector:
 persistence:
   enabled: true
   size: 5Gi
-  storageClass: local-path
-
+  storageClass: local-path-retain
+  volumeName: pvc-9e34ec9d-268b-4451-ab09-2d9e21156d9c
+  annotations:
+    argocd.argoproj.io/sync-options: Delete=false
 podSecurityContext:
   fsGroup: 1000
 containerSecurityContext:
