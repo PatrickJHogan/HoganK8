@@ -1,0 +1,17 @@
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+  annotations:
+    argocd.argoproj.io/sync-options: Delete=false,Prune=false
+spec:
+  valuesContent: |-
+    ports:
+      web:
+        exposedPort:4480
+        forwardedHeaders:
+          insecure: true
+      websecure:
+        exposedPort: 4443
+
