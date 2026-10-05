@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-routes
+  namespace: kube-system
+data:
+  routes.yaml: |
+    http:
+      middlewares:
+        nextcloud-dav: { redirectRegex: { regex: "^https://([^/]+)/\\.well-known/(card|cal)dav", replacement: "https://${1}/remote.php/dav/", permanent: true } }
+
+      routers:
+        mealie: { rule: "Host(`cook.hogans.at`) || Host(`mealie.eaglecomputerrepairsc.com`)", service: mealie }
+        audiobookshelf: { rule: "Host(`book.hogans.at`)", service: audiobookshelf }
+        linkwarden: { rule: "Host(`lw.hogans.at`)", service: linkwarden }
+        immich : { rule: "Host(`pic.hogans.at`) || Host(`pic.eaglecomputerrepairsc.com`)", service: immich }
+        homeassistant: { rule: "Host(`ha.hogans.at`) || Host(`hass.eaglecomputerrepairsc.com`)", service: homeassistant }
+        nextcloud: { rule: "Host(`nextcloud.eaglecomputerrepairsc.com`)", service: nextcloud, middlewares: [ nextcloud-dav ] }
+        foundry: { rule: "Host(`vtt.eaglecomputerrepairsc.com`)", service: foundry }
+        matrix: { rule: "Host(`mat.eaglecomputerrepairsc.com`) && (PathPrefix(`/_matrix/`) || PathPrefix(`/_synapse/client/`))", service: matrix }
+        matrix-fed: { entryPoints: [ matrixfed ], rule: "Host(`mat.eaglecomputerrepairsc.com`) && PathPrefix(`/_matrix/`)", service: matrix }
+        bitwarden: { rule: "Host(`mm.eaglecomputerrepairsc.com`) || Host(`bw.hogans.at`)", service: bitwarden }
+      services:
+        mealie: { loadBalancer: { servers: [ { url: "http://10.42.0.1:9925" } ] } }
+        audiobookshelf: { loadBalancer: { servers: [ { url: "http://10.42.0.10:13378" } ] } }
+        linkwarden: { loadBalancer: { servers: [ { url: "http://10.42.0.1:3903" } ] } }
+        immich: { loadBalancer: { servers: [ { url: "http://10.42.0.10:2283" } ] } }
+        homeassistant: { loadBalancer: { servers: [ { url: "http://10.42.0.5:8123" } ] } }
+        nextcloud: { loadBalancer: { servers: [ { url: "http://10.42.0.1:42271" } ] } }
+        foundry: { loadBalancer: { servers: [ { url: "http://10.42.0.1:30000" } ] } }
+        matrix: { loadBalancer: { servers: [ { url: "http://10.42.0.10:8008" } ] } }
+        matrix-fed: { loadBalancer: { servers: [ { url: "http://10.42.0.10:8008" } ] } }
+        bitwarden: { loadBalancer: { servers: [ { url: "http://10.42.0.1:8000" } ] } }

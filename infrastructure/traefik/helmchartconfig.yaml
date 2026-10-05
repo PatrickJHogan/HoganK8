@@ -14,4 +14,10 @@ spec:
           insecure: true
       websecure:
         exposedPort: 4443
-
+    volumes:
+      - name: configmap-routes
+        mountPath: /config/dynamic
+        type: configMap
+    additionalArguements:
+      - --providers.file.directory=/config/dynamic
+      - --providers.file.watch=true
