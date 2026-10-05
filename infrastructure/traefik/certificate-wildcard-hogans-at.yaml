@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-hogans-at
+  namespace: kube-system
+spec:
+  secretName: wildcard-hogans-at-tls
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+  dnsNames:
+    - hogans.at
+    - "*.hogans.at"

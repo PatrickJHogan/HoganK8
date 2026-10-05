@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager-webhook-hetzner
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-options: Prune=false
+spec:
+  project: default
+  sources:
+    - repoURL: https://charts.hetzner.cloud
+      chart: cert-manager-webhook-hetzner
+      targetRevision: 0.8.1
+      helm:
+        releaseName: cert-manager-webhook-hetzner
+        valueFiles:
+          - $values/infrastructure/cert-manager-webhook-hetzner/values.yaml
+    - repoURL: https://github.com/PatrickJHogan/HoganK8.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: cert-manager
