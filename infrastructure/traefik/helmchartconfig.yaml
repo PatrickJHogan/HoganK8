@@ -7,6 +7,8 @@ metadata:
     argocd.argoproj.io/sync-options: Delete=false,Prune=false
 spec:
   valuesContent: |-
+    nodeSelector:
+      hoganlab/location: cloud
     ports:
       web:
         exposedPort: 80
