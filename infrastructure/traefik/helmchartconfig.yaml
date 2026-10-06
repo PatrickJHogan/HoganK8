@@ -9,11 +9,23 @@ spec:
   valuesContent: |-
     ports:
       web:
-        exposedPort:4480
+        exposedPort: 80
         forwardedHeaders:
           insecure: true
       websecure:
-        exposedPort: 4443
+        exposedPort: 443
+      matrixfed:
+        port: 8448
+        exposedPort: 8448
+        expose:
+          default: true
+        protocol: TCP
+        tls:
+          enabled: true
+    service:
+      spec:
+        externalTrafficPolicy: Local
+      
     volumes:
       - name: configmap-routes
         mountPath: /config/dynamic
@@ -21,3 +33,6 @@ spec:
     additionalArguements:
       - --providers.file.directory=/config/dynamic
       - --providers.file.watch=true
+      - --entryPoints.web.http.redirections.entryPoint.to=:443
+      - --entryPoints.web.http.redirections.entryPoint.scheme=https
+      - --entryPoints.web.http.redirections.entryPoint.permanent=true
