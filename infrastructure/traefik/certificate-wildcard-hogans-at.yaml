@@ -6,7 +6,7 @@ metadata:
 spec:
   secretName: wildcard-hogans-at-tls
   issuerRef:
-    name: letsencrypt-staging
+    name: letsencrypt
     kind: ClusterIssuer
   dnsNames:
     - hogans.at
