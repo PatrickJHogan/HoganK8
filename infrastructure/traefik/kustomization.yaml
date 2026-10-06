@@ -5,3 +5,4 @@ resources:
   - configmap-routes.yaml
   - certificate-wildcard-hogans-at.yaml
   - certificate-wildcard-eaglecomputerrepairsc-com.yaml
+  - tlsstore-default.yaml
