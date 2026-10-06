@@ -6,7 +6,7 @@ metadata:
 spec:
   secretName: wildcard-eaglecomputerrepairsc-com-tls
   issuerRef:
-    name: letsencrypt-staging
+    name: letsencrypt
     kind: ClusterIssuer
   dnsNames:
     - eaglecomputerrepairsc.com
