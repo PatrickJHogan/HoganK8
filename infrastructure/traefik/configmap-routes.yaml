@@ -10,16 +10,16 @@ data:
         nextcloud-dav: { redirectRegex: { regex: "^https://([^/]+)/\\.well-known/(card|cal)dav", replacement: "https://${1}/remote.php/dav/", permanent: true } }
 
       routers:
-        mealie: { rule: "Host(`cook.hogans.at`) || Host(`mealie.eaglecomputerrepairsc.com`)", service: mealie }
-        audiobookshelf: { rule: "Host(`book.hogans.at`)", service: audiobookshelf }
-        linkwarden: { rule: "Host(`lw.hogans.at`)", service: linkwarden }
-        immich : { rule: "Host(`pic.hogans.at`) || Host(`pic.eaglecomputerrepairsc.com`)", service: immich }
-        homeassistant: { rule: "Host(`ha.hogans.at`) || Host(`hass.eaglecomputerrepairsc.com`)", service: homeassistant }
-        nextcloud: { rule: "Host(`nextcloud.eaglecomputerrepairsc.com`)", service: nextcloud, middlewares: [ nextcloud-dav ] }
-        foundry: { rule: "Host(`vtt.eaglecomputerrepairsc.com`)", service: foundry }
-        matrix: { rule: "Host(`mat.eaglecomputerrepairsc.com`) && (PathPrefix(`/_matrix/`) || PathPrefix(`/_synapse/client/`))", service: matrix }
+        mealie: { entryPoints: [ websecure ], rule: "Host(`cook.hogans.at`) || Host(`mealie.eaglecomputerrepairsc.com`)", service: mealie }
+        audiobookshelf: {entryPoints: [ websecure ], rule: "Host(`book.hogans.at`)", service: audiobookshelf }
+        linkwarden: { entryPoints: [ websecure ], rule: "Host(`lw.hogans.at`)", service: linkwarden }
+        immich : { entryPoints: [ websecure ], rule: "Host(`pic.hogans.at`) || Host(`pic.eaglecomputerrepairsc.com`)", service: immich }
+        homeassistant: { entryPoints: [ websecure ], rule: "Host(`ha.hogans.at`) || Host(`hass.eaglecomputerrepairsc.com`)", service: homeassistant }
+        nextcloud: { entryPoints: [ websecure ], rule: "Host(`nextcloud.eaglecomputerrepairsc.com`)", service: nextcloud, middlewares: [ nextcloud-dav ] }
+        foundry: { entryPoints: [ websecure ], rule: "Host(`vtt.eaglecomputerrepairsc.com`)", service: foundry }
+        matrix: { entryPoints: [ websecure ], rule: "Host(`mat.eaglecomputerrepairsc.com`) && (PathPrefix(`/_matrix/`) || PathPrefix(`/_synapse/client/`))", service: matrix }
         matrix-fed: { entryPoints: [ matrixfed ], rule: "Host(`mat.eaglecomputerrepairsc.com`) && PathPrefix(`/_matrix/`)", service: matrix }
-        bitwarden: { rule: "Host(`mm.eaglecomputerrepairsc.com`) || Host(`bw.hogans.at`)", service: bitwarden }
+        bitwarden: { entryPoints: [ websecure ], rule: "Host(`mm.eaglecomputerrepairsc.com`) || Host(`bw.hogans.at`)", service: bitwarden }
       services:
         mealie: { loadBalancer: { servers: [ { url: "http://10.42.0.1:9925" } ] } }
         audiobookshelf: { loadBalancer: { servers: [ { url: "http://10.42.0.10:13378" } ] } }
