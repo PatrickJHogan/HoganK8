@@ -30,7 +30,7 @@ spec:
       - name: configmap-routes
         mountPath: /config/dynamic
         type: configMap
-    additionalArguements:
+    additionalArguments:
       - --providers.file.directory=/config/dynamic
       - --providers.file.watch=true
       - --entryPoints.web.http.redirections.entryPoint.to=:443
